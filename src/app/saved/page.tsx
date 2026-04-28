@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SavedProfile } from "@/types";
+import { loadProfiles, deleteProfile } from "@/lib/storage";
 
 const BG = "linear-gradient(160deg, #D8E2DC 0%, #FFE5D9 50%, #FFCAD4 100%)";
 
@@ -50,24 +51,19 @@ export default function SavedPage() {
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    fetch("/api/profiles")
-      .then((r) => r.json())
-      .then((data: SavedProfile[]) => setProfiles(sortProfiles(data)))
-      .finally(() => setIsLoading(false));
+    setProfiles(sortProfiles(loadProfiles()));
+    setIsLoading(false);
   }, []);
 
-  async function handleDelete(id: string) {
+  function handleDelete(id: string) {
     setDeletingIds((prev) => new Set([...prev, id]));
-    try {
-      await fetch(`/api/profiles/${id}`, { method: "DELETE" });
-      setProfiles((prev) => prev.filter((p) => p.id !== id));
-    } finally {
-      setDeletingIds((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
-    }
+    deleteProfile(id);
+    setProfiles((prev) => prev.filter((p) => p.id !== id));
+    setDeletingIds((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
   }
 
   return (

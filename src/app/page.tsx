@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { generateProfileName, generateEnglishName } from "@/lib/generator";
+import { saveProfile } from "@/lib/storage";
 
 type Lang = "ko" | "en";
 type Length = 8 | 12;
@@ -51,16 +52,7 @@ export default function GeneratorPage() {
     if (!name) return;
     setIsSaving(true);
     try {
-      await fetch("/api/profiles", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          lang,
-          ...(lang === "ko" ? { length } : {}),
-          ...(meaning ? { meaning } : {}),
-        }),
-      });
+      saveProfile(name, lang, lang === "ko" ? length : undefined, meaning);
       setPhase("saved");
     } finally {
       setIsSaving(false);
