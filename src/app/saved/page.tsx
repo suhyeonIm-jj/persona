@@ -157,73 +157,85 @@ export default function SavedPage() {
                   )}
 
                   <div
-                    className="flex items-start justify-between gap-3 rounded-2xl px-4 py-3.5 transition-all"
+                    className="rounded-2xl px-4 py-3.5 transition-all"
                     style={{
                       background: "rgba(255,255,255,0.6)",
                       border: "1px solid rgba(244,172,183,0.3)",
                       backdropFilter: "blur(8px)",
                     }}
                   >
-                    {/* 이름 + 의미 + 시간 */}
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[#2D1F25] font-semibold text-base break-keep leading-snug">
-                        {profile.name}
-                      </p>
-                      {profile.meaning && (
-                        <p className="text-[#9D8189] text-xs mt-0.5 italic">{profile.meaning}</p>
-                      )}
-                      <p className="text-[#9D8189]/50 text-xs mt-1">{formatDate(profile.savedAt)}</p>
+                    {/* 상단: 이름 + 뱃지 + 삭제 */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[#2D1F25] font-semibold text-base break-keep leading-snug">
+                          {profile.name}
+                        </p>
+                        {profile.meaning && (
+                          <p className="text-[#9D8189] text-xs mt-0.5 italic">{profile.meaning}</p>
+                        )}
+                        <p className="text-[#9D8189]/50 text-xs mt-1">{formatDate(profile.savedAt)}</p>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0 mt-0.5">
+                        {profile.lang === "en" ? (
+                          <span
+                            className="text-xs font-semibold px-2.5 py-1 rounded-full"
+                            style={{ background: "rgba(216,226,220,0.6)", color: "#3d6048" }}
+                          >
+                            EN
+                          </span>
+                        ) : (
+                          <span
+                            className="text-xs font-semibold px-2.5 py-1 rounded-full"
+                            style={{
+                              background: profile.length === 12
+                                ? "rgba(244,172,183,0.35)"
+                                : "rgba(255,202,212,0.5)",
+                              color: "#9D8189",
+                            }}
+                          >
+                            {profile.length}자
+                          </span>
+                        )}
+                        <button
+                          onClick={() => handleDelete(profile.id)}
+                          disabled={deletingIds.has(profile.id)}
+                          className="w-8 h-8 flex items-center justify-center rounded-full transition-all disabled:opacity-40 text-[#9D8189]/35 hover:text-rose-400 hover:bg-rose-100/60"
+                          aria-label="삭제"
+                        >
+                          {deletingIds.has(profile.id) ? (
+                            <div
+                              className="w-3.5 h-3.5 border rounded-full animate-spin"
+                              style={{ borderColor: "rgba(157,129,137,0.4)", borderTopColor: "transparent" }}
+                            />
+                          ) : (
+                            <TrashIcon />
+                          )}
+                        </button>
+                      </div>
                     </div>
 
-                    {/* 뱃지 + 복사 + 삭제 */}
-                    <div className="flex items-center gap-2 shrink-0 mt-0.5">
-                      {profile.lang === "en" ? (
-                        <span
-                          className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                          style={{ background: "rgba(216,226,220,0.6)", color: "#3d6048" }}
-                        >
-                          EN
-                        </span>
+                    {/* 하단: 복사하기 버튼 */}
+                    <button
+                      onClick={() => handleCopy(profile.id, profile.name)}
+                      className="mt-3 w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold transition-all active:scale-[0.98]"
+                      style={{
+                        background: copiedId === profile.id ? "rgba(216,226,220,0.7)" : "rgba(255,255,255,0.5)",
+                        color: copiedId === profile.id ? "#3d6048" : "#9D8189",
+                        border: copiedId === profile.id ? "1px solid rgba(216,226,220,0.8)" : "1px solid rgba(157,129,137,0.18)",
+                      }}
+                    >
+                      {copiedId === profile.id ? (
+                        <>
+                          <CheckIcon />
+                          복사됨
+                        </>
                       ) : (
-                        <span
-                          className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                          style={{
-                            background: profile.length === 12
-                              ? "rgba(244,172,183,0.35)"
-                              : "rgba(255,202,212,0.5)",
-                            color: "#9D8189",
-                          }}
-                        >
-                          {profile.length}자
-                        </span>
+                        <>
+                          <CopyIcon />
+                          복사하기
+                        </>
                       )}
-                      <button
-                        onClick={() => handleCopy(profile.id, profile.name)}
-                        className="w-8 h-8 flex items-center justify-center rounded-full transition-all"
-                        style={{
-                          background: copiedId === profile.id ? "rgba(216,226,220,0.7)" : "transparent",
-                          color: copiedId === profile.id ? "#3d6048" : "rgba(157,129,137,0.4)",
-                        }}
-                        aria-label="복사"
-                      >
-                        {copiedId === profile.id ? <CheckIcon /> : <CopyIcon />}
-                      </button>
-                      <button
-                        onClick={() => handleDelete(profile.id)}
-                        disabled={deletingIds.has(profile.id)}
-                        className="w-8 h-8 flex items-center justify-center rounded-full transition-all disabled:opacity-40 text-[#9D8189]/35 hover:text-rose-400 hover:bg-rose-100/60"
-                        aria-label="삭제"
-                      >
-                        {deletingIds.has(profile.id) ? (
-                          <div
-                            className="w-3.5 h-3.5 border rounded-full animate-spin"
-                            style={{ borderColor: "rgba(157,129,137,0.4)", borderTopColor: "transparent" }}
-                          />
-                        ) : (
-                          <TrashIcon />
-                        )}
-                      </button>
-                    </div>
+                    </button>
                   </div>
                 </div>
               );
