@@ -35,6 +35,23 @@ function sortProfiles(data: SavedProfile[]): SavedProfile[] {
   });
 }
 
+function CopyIcon() {
+  return (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
+        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+    </svg>
+  );
+}
+
 function TrashIcon() {
   return (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,11 +66,18 @@ export default function SavedPage() {
   const [profiles, setProfiles] = useState<SavedProfile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   useEffect(() => {
     setProfiles(sortProfiles(loadProfiles()));
     setIsLoading(false);
   }, []);
+
+  async function handleCopy(id: string, name: string) {
+    await navigator.clipboard.writeText(name);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  }
 
   function handleDelete(id: string) {
     setDeletingIds((prev) => new Set([...prev, id]));
@@ -151,7 +175,7 @@ export default function SavedPage() {
                       <p className="text-[#9D8189]/50 text-xs mt-1">{formatDate(profile.savedAt)}</p>
                     </div>
 
-                    {/* 뱃지 + 삭제 */}
+                    {/* 뱃지 + 복사 + 삭제 */}
                     <div className="flex items-center gap-2 shrink-0 mt-0.5">
                       {profile.lang === "en" ? (
                         <span
@@ -173,6 +197,17 @@ export default function SavedPage() {
                           {profile.length}자
                         </span>
                       )}
+                      <button
+                        onClick={() => handleCopy(profile.id, profile.name)}
+                        className="w-8 h-8 flex items-center justify-center rounded-full transition-all"
+                        style={{
+                          background: copiedId === profile.id ? "rgba(216,226,220,0.7)" : "transparent",
+                          color: copiedId === profile.id ? "#3d6048" : "rgba(157,129,137,0.4)",
+                        }}
+                        aria-label="복사"
+                      >
+                        {copiedId === profile.id ? <CheckIcon /> : <CopyIcon />}
+                      </button>
                       <button
                         onClick={() => handleDelete(profile.id)}
                         disabled={deletingIds.has(profile.id)}

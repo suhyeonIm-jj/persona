@@ -19,6 +19,7 @@ export default function GeneratorPage() {
   const [meaning, setMeaning] = useState<string | undefined>(undefined);
   const [phase, setPhase] = useState<Phase>("idle");
   const [isSaving, setIsSaving] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   function reset() {
     setName(null);
@@ -46,6 +47,13 @@ export default function GeneratorPage() {
       setMeaning(`${result.pronunciation} · ${result.meaning}`);
     }
     setPhase("generated");
+  }
+
+  async function handleCopy() {
+    if (!name) return;
+    await navigator.clipboard.writeText(name);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
 
   async function handleSave() {
@@ -198,26 +206,53 @@ export default function GeneratorPage() {
 
           {phase === "generated" && (
             <>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="flex-1 bg-[#9D8189] hover:bg-[#8a6e76] active:bg-[#7a5e66] active:scale-[0.98] text-white font-semibold py-4 rounded-2xl transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+                  style={{ boxShadow: "0 4px 20px rgba(157,129,137,0.35)" }}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                  </svg>
+                  {isSaving ? "저장 중..." : "저장하기"}
+                </button>
+                <button
+                  onClick={handleGenerate}
+                  className="flex-1 active:scale-[0.98] text-[#9D8189] font-semibold py-4 rounded-2xl transition-all flex items-center justify-center gap-2"
+                  style={{ background: "rgba(255,202,212,0.45)", border: "1px solid rgba(244,172,183,0.3)" }}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  다시 생성
+                </button>
+              </div>
               <button
-                onClick={handleGenerate}
-                className="w-full active:scale-[0.98] text-[#9D8189] font-semibold py-4 rounded-2xl transition-all flex items-center justify-center gap-2"
-                style={{ background: "rgba(255,202,212,0.45)", border: "1px solid rgba(244,172,183,0.3)" }}
+                onClick={handleCopy}
+                className="w-full active:scale-[0.98] font-semibold py-4 rounded-2xl transition-all flex items-center justify-center gap-2"
+                style={{
+                  background: copied ? "rgba(216,226,220,0.65)" : "rgba(255,255,255,0.55)",
+                  color: copied ? "#3d6048" : "#9D8189",
+                  border: copied ? "1px solid rgba(216,226,220,0.8)" : "1px solid rgba(157,129,137,0.2)",
+                }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                다시 생성
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={isSaving}
-                className="w-full bg-[#9D8189] hover:bg-[#8a6e76] active:bg-[#7a5e66] active:scale-[0.98] text-white font-semibold py-4 rounded-2xl transition-all disabled:opacity-60 flex items-center justify-center gap-2"
-                style={{ boxShadow: "0 4px 20px rgba(157,129,137,0.35)" }}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                </svg>
-                {isSaving ? "저장 중..." : "저장하기"}
+                {copied ? (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    복사됨
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    복사하기
+                  </>
+                )}
               </button>
             </>
           )}
