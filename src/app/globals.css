@@ -1,7 +1,17 @@
 @import "tailwindcss";
 
-html,
-body {
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
   height: 100%;
   overscroll-behavior: none;
+  margin: 0;
+  padding: 0;
+  background: #FAF6EE;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

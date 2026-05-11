@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { SavedProfile } from "@/types";
+import { SavedProfile, Palette, Shape } from "@/types";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "saved-profiles.json");
@@ -13,8 +13,7 @@ function ensureFile(): void {
 function read(): SavedProfile[] {
   ensureFile();
   try {
-    const raw = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8")) as Partial<SavedProfile>[];
-    return raw.map((p) => ({ lang: "ko", ...p } as SavedProfile));
+    return JSON.parse(fs.readFileSync(DATA_FILE, "utf-8")) as SavedProfile[];
   } catch {
     return [];
   }
@@ -32,20 +31,19 @@ export function getProfiles(): SavedProfile[] {
 export function saveProfile(
   name: string,
   lang: "ko" | "en",
-  length?: 8 | 12,
+  palette: Palette = "mono",
+  shape: Shape = "mixed",
   meaning?: string,
+  length?: 8 | 12,
 ): SavedProfile {
-  const profiles = read();
   const profile: SavedProfile = {
     id: crypto.randomUUID(),
-    name,
-    lang,
-    ...(length !== undefined ? { length } : {}),
+    name, lang, palette, shape,
+    savedAt: Date.now(),
     ...(meaning ? { meaning } : {}),
-    savedAt: new Date().toISOString(),
+    ...(length !== undefined ? { length } : {}),
   };
-  profiles.push(profile);
-  write(profiles);
+  write([profile, ...read()]);
   return profile;
 }
 

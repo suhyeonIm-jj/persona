@@ -1,11 +1,8 @@
-// ─── 한글 단어 풀 ──────────────────────────────────────────────────────────
-// 구조: [성격형용사] + [자연배경/색깔] + [동물/캐릭터]
-// 이 조합은 항상 "○○한 ○○ 속의 ○○" 처럼 의미가 자연스럽게 연결됨
+// ─── 한글 단어 풀 (글자수 기반 템플릿용) ──────────────────────────────────
 
 export type WordCategory = "personality" | "color" | "nature" | "creature";
 
 export const words: Record<WordCategory, Record<number, string[]>> = {
-  // 성격·감성 형용사
   personality: {
     3: [
       "수줍은", "엉뚱한", "느긋한", "다정한", "용감한",
@@ -18,45 +15,22 @@ export const words: Record<WordCategory, Record<number, string[]>> = {
       "설레이는", "꿈꾸듯이",
     ],
   },
-  // 색깔·외형 형용사 (동물 앞에 바로 붙어 자연스럽게 수식)
   color: {
-    2: [
-      "하얀", "붉은", "푸른", "검은", "노란",
-      "분홍", "연한", "짙은",
-    ],
+    2: ["하얀", "붉은", "푸른", "검은", "노란", "분홍", "연한", "짙은"],
   },
-  // 자연 배경·계절·장소 (이야기의 배경이 됨)
   nature: {
-    2: [
-      "달빛", "별빛", "봄날", "숲속", "새벽",
-      "노을", "꽃길", "바람",
-    ],
-    3: [
-      "봄날의", "달빛의", "별빛의", "숲속의",
-      "강가의", "꽃밭의", "들판의", "새벽의",
-    ],
-    4: [
-      "달빛아래", "별빛속의", "봄날아침", "숲속깊이",
-      "꽃밭속의", "노을지는", "새벽이슬", "강가에서",
-    ],
+    2: ["달빛", "별빛", "봄날", "숲속", "새벽", "노을", "꽃길", "바람"],
+    3: ["봄날의", "달빛의", "별빛의", "숲속의", "강가의", "꽃밭의", "들판의", "새벽의"],
+    4: ["달빛아래", "별빛속의", "봄날아침", "숲속깊이", "꽃밭속의", "노을지는", "새벽이슬", "강가에서"],
   },
-  // 동물·캐릭터 (닉네임의 주인공)
   creature: {
-    2: [
-      "여우", "토끼", "나비", "늑대", "사슴",
-      "고래", "수달", "펭귄",
-    ],
-    3: [
-      "고양이", "다람쥐", "올빼미", "반딧불",
-      "호박벌", "너구리",
-    ],
-    4: [
-      "반딧불이", "고슴도치",
-    ],
+    2: ["여우", "토끼", "나비", "늑대", "사슴", "고래", "수달", "펭귄"],
+    3: ["고양이", "다람쥐", "올빼미", "반딧불", "호박벌", "너구리"],
+    4: ["반딧불이", "고슴도치"],
   },
 };
 
-// ─── 영어 단어 풀 (단일 단어 닉네임) ──────────────────────────────────────
+// ─── 영어 단어 풀 (단일 단어 + 발음 + 의미) ────────────────────────────────
 
 export interface EnWord {
   word: string;
@@ -115,10 +89,6 @@ export const enWords: EnWord[] = [
   { word: "Lark",     meaning: "새벽을 여는 종달새",           pronunciation: "라크" },
   { word: "Glen",     meaning: "아늑한 산골짜기",              pronunciation: "글렌" },
   { word: "Cove",     meaning: "조용한 작은 만",              pronunciation: "코브" },
-  { word: "Bay",      meaning: "월계수, 작은 만",             pronunciation: "베이" },
-  { word: "Birch",    meaning: "자작나무",                    pronunciation: "버치" },
-  { word: "Dew",      meaning: "이슬",                       pronunciation: "듀" },
-  { word: "Mist",     meaning: "신비로운 안개",               pronunciation: "미스트" },
   { word: "Dawn",     meaning: "여명, 새로운 시작",            pronunciation: "던" },
 
   // 식물 · 생명
@@ -132,7 +102,6 @@ export const enWords: EnWord[] = [
   { word: "Hazel",    meaning: "개암나무, 따뜻한 갈색",        pronunciation: "헤이즐" },
   { word: "Briar",    meaning: "들장미",                      pronunciation: "브라이어" },
   { word: "Clover",   meaning: "행운의 네잎클로버",            pronunciation: "클로버" },
-  { word: "Willa",    meaning: "굳은 의지",                   pronunciation: "윌라" },
 
   // 판타지 · 신화
   { word: "Phoenix",  meaning: "불사조",                      pronunciation: "피닉스" },
@@ -148,11 +117,9 @@ export const enWords: EnWord[] = [
   { word: "Mira",     meaning: "경이로운",                    pronunciation: "미라" },
   { word: "Seraph",   meaning: "빛을 가진 천사",              pronunciation: "세라프" },
   { word: "Nyx",      meaning: "밤의 여신",                   pronunciation: "닉스" },
-  { word: "Evander",  meaning: "좋은 사람",                   pronunciation: "에반더" },
   { word: "Dorian",   meaning: "아름다운, 영원한",             pronunciation: "도리안" },
   { word: "Zion",     meaning: "평화로운 땅",                 pronunciation: "자이온" },
   { word: "Caspian",  meaning: "바다처럼 넓은",               pronunciation: "캐스피안" },
-  { word: "Emrys",    meaning: "불멸의",                      pronunciation: "엠리스" },
   { word: "Elysia",   meaning: "낙원, 이상향",                pronunciation: "엘리시아" },
 
   // 감성 실제 이름
@@ -163,10 +130,7 @@ export const enWords: EnWord[] = [
   { word: "Faye",     meaning: "요정, 믿음",                pronunciation: "페이" },
   { word: "Blythe",   meaning: "기쁨, 명랑한",              pronunciation: "블라이스" },
   { word: "Seren",    meaning: "별, 고요한",                pronunciation: "세렌" },
-  { word: "Rue",      meaning: "회향풀, 소중한 기억",        pronunciation: "루" },
   { word: "Cora",     meaning: "소녀, 순수함",              pronunciation: "코라" },
-  { word: "Lila",     meaning: "라일락, 우아함",            pronunciation: "라일라" },
-  { word: "Anya",     meaning: "은혜로운",                  pronunciation: "아냐" },
   { word: "Zara",     meaning: "빛나는, 꽃",               pronunciation: "자라" },
   { word: "Rory",     meaning: "붉은 왕, 명성",            pronunciation: "로리" },
   { word: "Asher",    meaning: "행복한, 축복받은",          pronunciation: "애셔" },
@@ -183,7 +147,6 @@ export const enWords: EnWord[] = [
   { word: "Nimbus",   meaning: "빛의 후광",                   pronunciation: "님버스" },
   { word: "Sable",    meaning: "흑담비, 우아한 어둠",          pronunciation: "세이블" },
   { word: "Garnet",   meaning: "진한 붉은 보석",              pronunciation: "가넷" },
-  { word: "Lapis",    meaning: "하늘빛 청금석",               pronunciation: "라피스" },
   { word: "Pearl",    meaning: "진주, 순수함",                pronunciation: "펄" },
 
   // 모던 · 테크
@@ -192,10 +155,8 @@ export const enWords: EnWord[] = [
   { word: "Neon",     meaning: "네온빛",                      pronunciation: "네온" },
   { word: "Pixel",    meaning: "빛의 최소 단위",              pronunciation: "픽셀" },
   { word: "Flux",     meaning: "끊임없는 변화",               pronunciation: "플럭스" },
-  { word: "Arctic",   meaning: "극지의 차가운 힘",             pronunciation: "아틱" },
   { word: "Sterling", meaning: "순수한, 진짜의",              pronunciation: "스털링" },
   { word: "Sylvan",   meaning: "숲의",                        pronunciation: "실번" },
-  { word: "Vector",   meaning: "방향과 크기를 가진 힘",        pronunciation: "벡터" },
   { word: "Axiom",    meaning: "변하지 않는 진리",             pronunciation: "액시엄" },
 
   // 덕목 · 감성 분위기
@@ -209,12 +170,9 @@ export const enWords: EnWord[] = [
   { word: "Haven",    meaning: "안식처",                      pronunciation: "헤이븐" },
   { word: "Valor",    meaning: "용맹, 용기",                  pronunciation: "밸러" },
   { word: "Hope",     meaning: "희망",                        pronunciation: "호프" },
-  { word: "Joy",      meaning: "순수한 기쁨",                 pronunciation: "조이" },
   { word: "Grace",    meaning: "우아함, 은총",                pronunciation: "그레이스" },
-  { word: "True",     meaning: "진실한, 충실한",              pronunciation: "트루" },
   { word: "Solace",   meaning: "위안, 안도",                  pronunciation: "솔라스" },
   { word: "Reverie",  meaning: "달콤한 몽상",                 pronunciation: "레버리" },
   { word: "Serene",   meaning: "고요하고 평화로운",            pronunciation: "서린" },
-  { word: "Calm",     meaning: "잔잔한 평온",                 pronunciation: "캄" },
   { word: "Lumen",    meaning: "빛의 밝기",                   pronunciation: "루멘" },
 ];
